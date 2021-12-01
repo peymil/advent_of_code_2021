@@ -26,7 +26,7 @@ func main() {
 	}
 
 	fmt.Printf("Answer of the first question : %d\n", findIncreasedValues(text))
-	fmt.Printf("Answer of the second question : %d\n", findIncreasedValuesInThreeDimensionalWindow(text))
+	fmt.Printf("Answer of the second question : %d\n", findIncreasedValuesInNWindow(text, 3))
 	file.Close()
 
 }
@@ -43,18 +43,22 @@ func findIncreasedValues(arr []int) int {
 	// No prev value in first loop. To get the correct result subtract one from result.
 	return increasedCount - 1
 }
-func findIncreasedValuesInThreeDimensionalWindow(arr []int) int {
-	//completely wrong
-	prevWindowSum := 0
-	currWindowSum := 0
-	increasedCount := 0
-	for _, value := range arr {
-		currWindowSum += value
-		if currWindowSum > prevWindowSum {
-			increasedCount++
+func findIncreasedValuesInNWindow(arr []int, window int) int {
+	count := 0
+	for i := window; i <= len(arr); i++ {
+		currSum := sumSlice(arr[i-window : i])
+		nextSum := sumSlice(arr[i+1-window : i+1])
+		// fmt.Printf("%d,%d", currSum, nextSum)
+		if nextSum > currSum {
+			count++
 		}
-		prevWindowSum = currWindowSum
 	}
-
-	return increasedCount - 3
+	return count
+}
+func sumSlice(array []int) int {
+	var result int
+	for _, n := range array {
+		result = result + n
+	}
+	return result
 }
